@@ -1,0 +1,13 @@
+name: Deploy after push
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+jobs:
+  run-release-pdf-workflow:
+    uses: envicutor/docs-workflows/.github/workflows/release-pdf.yml@main
+    with:
+      target: final-document
+    secrets:
+      pat: ${{ secrets.pat }}
