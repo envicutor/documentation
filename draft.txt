@@ -1,0 +1,12 @@
+- What do I want the audience to know?
+  - What a code execution system is
+  - Problems with current code execution systems
+  - How we built a code execution system that attempts to solve these problems
+    - Isolation
+    - Execution limits and metrics
+    - Package installation and dependency management
+    - Concurrency
+  - Testing
+  - Challenges
+    - Security vulnerabilities can slip in easily
+    - No definitive answer to most stuff

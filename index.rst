@@ -6,5 +6,6 @@ Envicutor Project Documentation
    :caption: Contents:
    :numbered:
 
+   introduction.rst
 
 .. bibliography::
