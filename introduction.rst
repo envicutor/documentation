@@ -46,7 +46,7 @@ Execution limits
 
 We define execution limits as the constraints that a submission is subject to; these include: CPU time, wall (real) time, memory usage, and other constraints.
 
-Many systems that make use of remote code execution need to impose execution limits on submissions. For example, a competitive programming system needs to ensure the execution time for the competitors' submissions does not exceed the time limit that the judge determined for a certain problem (imposing a CPU-time limit).\ :cite:`codeforces-cpu-time-limit`
+Many systems that make use of remote code execution need to impose execution limits on submissions. For example, a competitive programming system needs to ensure the execution time for the competitors' submissions does not exceed the time limit that the judge determined for a certain problem (imposing a CPU-time limit) :cite:`codeforces-cpu-time-limit`.
 
 We discuss suboptimal ways some code execution systems use to impose such constraints and how Envicutor imposes them.
 
@@ -55,7 +55,7 @@ Execution metrics
 
 We define execution metrics as quantitative and qualitative metrics that provide insights into the behavior and outcomes of a submission. These metrics include: CPU time, wall (real) time, memory usage, exit code, exit signal, standard output, standard error and other metrics.
 
-In the competitive programming system example, the system also needs to know the standard output that executing a submission produced to be able to judge the submission against the test cases. Some competitive programming systems even give the competitors' the ability to see how much CPU-time and memory their submissions consumed.\ :cite:`codeforces-metrics`
+In the competitive programming system example, the system also needs to know the standard output that executing a submission produced to be able to judge the submission against the test cases. Some competitive programming systems even give the competitors' the ability to see how much CPU-time and memory their submissions consumed :cite:`codeforces-metrics`.
 
 Package management
 ------------------
@@ -143,3 +143,43 @@ Project work plan
     - Future
   * - Work on CI/CD for the system
     - Future
+
+Used tools
+**********
+
+Programming languages
+=====================
+
+We chose to write Envicutor in Rust :cite:`rust-homepage`. Rust has powerful concurrency APIs that helps us in managing different concurrency scenarios in submissions as we will discuss throughout the report. Moreover, it provides extensive compile-time checks that ensure correctness in multiple concurrency scenarios. This greatly improves productivity and boosts confidence in the quality of the software.
+
+From Rust's networking page :cite:`rust-networking-page`:
+
+  Concurrent at scale
+
+  Use any mixture of concurrency approaches that works for you. Rust will make sure you don’t accidentally share state between threads or tasks. It empowers you to squeeze every last bit of scaling, fearlessly.
+
+Our API tests, simulation tests, and demos are written in Node.js because these assets do not require the strict compile-time checks (or compilation in general) provided by Rust.
+
+Handling Isolation, execution limits and execution metrics
+==========================================================
+
+We use Isolate :cite:`isolate-repo` to execute submissions in an isolated sandbox, to impose limits on the submissions and to get the execution metrics. It is used in the International Olympiad in Informatics Contest Management System (IOI CMS) :cite:`cms-homepage` and in code execution systems like Judge0 :cite:`judge0-paper`.
+
+Package management
+==================
+
+We use Nix :cite:`nix-homepage` as our package manager. Nix has an approach to package management which ensures that multiple versions of the same package can exist on the system, and packages which have conflicting dependencies can co-exist safely on the system :cite:`nix-phd`. From Nix's homepage:
+
+  Nix builds packages in isolation from each other. This ensures that they are reproducible and don’t have undeclared dependencies
+
+Managing runtimes data
+======================
+
+We use SQLite :cite:`sqlite-homepage` to manage runtime data. Runtime data is local to every Envicutor node and doesn't typically have concurrent writers. This makes SQLite, rather than a client-server database, a good fit. From SQLite's "when to use" page :cite:`sqlite-when-to-use`:
+
+  For device-local storage with low writer concurrency and less than a terabyte of content, SQLite is almost always a better solution. SQLite is fast and reliable and it requires no configuration or maintenance. It keeps things simple. SQLite "just works".
+
+Containerization and reproducible deployments
+=============================================
+
+We use Docker :cite:`docker-homepage` to ensure we can spin up a reproducible environment that works seamlessly with Nix and Isolate.
