@@ -9,3 +9,4 @@ Envicutor Project Documentation
    introduction.rst
 
 .. bibliography::
+   :style: unsrt
