@@ -12,3 +12,30 @@
     - No definitive answer to most stuff
 
 TODO: try removing clearpages
+
+- Brainstorm ideas for the project and pick the best idea
+- Analyze similar open source systems (skim the source code and check their github issues)
+- Come up with an abstract idea of the project and the problems it aims to solve
+- Re-analyze the open source systems to verify that the problems aren't already solved
+- Brainstorm the overview of the project
+- Write an initial developers' guide for collaborating on the project
+- Set up continuous integration and deployment (CI/CD) for the documentation of the project
+- Write an initial use-case diagram, component diagram and activity flow
+- Write an initial sequence diagram and an api documentation
+- Come up with different technologies that can be used
+- Experiment with the different technologies to validate feasibility and to choose the most appropriate technologies
+- Update the documentation based on the new findings
+- Write a throwaway prototype for the most crucial parts of the system to check feasibility
+- Update the documentation based on findings from the prototype
+- Write the initial pseudocode and class diagram
+- Work on runtimes management
+- Write runtimes management API tests
+- Work on code execution
+- Write code execution API tests
+- Update the documentation and architecture based on findings from working on the system
+- Work on simulation testing (simulating real contest submissions on Envicutor)
+- Refine the system with more features and optimizations, refine the API tests
+- Work on other demos of the system
+- Re-structure the documentation and write an API documentation for the system
+- Open source the system
+- Work on CI/CD for the system

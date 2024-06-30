@@ -24,6 +24,33 @@ latex_elements = {
   'maxlistdepth': '99',
   'figure_align': 'H',
   'preamble': r"""
+%% --------------------------------------------------
+%% |:sec:| add list of figures, list of tables
+%% --------------------------------------------------
+\makeatletter
+\renewcommand{\sphinxtableofcontents}{%
+  %
+  % before resetting page counter, let's do the right thing.
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \pagenumbering{roman}%
+  \begingroup
+    \parskip \z@skip
+    \tableofcontents
+  \endgroup
+  %
+  %% addtional lists
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \addcontentsline{toc}{chapter}{List of Figures}%
+  \listoffigures
+  %
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \addcontentsline{toc}{chapter}{List of Tables}%
+  \listoftables
+  %
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \pagenumbering{arabic}%
+}
+\makeatother
 \let\cleardoublepage=\clearpage
 """,
   'maketitle': r"""

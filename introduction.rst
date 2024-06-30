@@ -79,3 +79,67 @@ Concurrency
 ===========
 
 Throughout the report, we discuss several strategies we use to ensure that multiple submissions can run concurrently on the system without exhausting its resources and without starving each other from resources.
+
+Project work plan
+*****************
+
+.. list-table:: Work Plan
+  :header-rows: 1
+  :widths: 50 6
+  :class: table-bordered
+
+  * - Task
+    - Status
+
+  * - Brainstorm ideas for the project and pick the best idea
+    - Done
+  * - Analyze similar open source systems (skim the source code and check their github issues)
+    - Done
+  * - Come up with an abstract idea of the project and the problems it aims to solve
+    - Done
+  * - Re-analyze the open source systems to verify that the problems aren't already solved
+    - Done
+  * - Brainstorm the overview of the project
+    - Done
+  * - Write an initial developers' guide for collaborating on the project
+    - Done
+  * - Set up continuous integration and deployment (CI/CD) for the documentation of the project
+    - Done
+  * - Write an initial use-case diagram, component diagram and activity flow
+    - Done
+  * - Write an initial sequence diagram and an api documentation
+    - Done
+  * - Come up with different technologies that can be used
+    - Done
+  * - Experiment with the different technologies to validate feasibility and to choose the most appropriate technologies
+    - Done
+  * - Update the documentation based on the new findings
+    - Done
+  * - Write a throwaway prototype for the most crucial parts of the system to check feasibility
+    - Done
+  * - Update the documentation based on findings from the prototype
+    - Done
+  * - Write the initial pseudocode and class diagram
+    - Done
+  * - Work on runtimes management
+    - Done
+  * - Write runtimes management API tests
+    - Done
+  * - Work on code execution
+    - Done
+  * - Write code execution API tests
+    - Done
+  * - Update the documentation and architecture based on findings from working on the system
+    - Done
+  * - Work on simulation testing (simulating real contest submissions on Envicutor)
+    - Done
+  * - Refine the system with more features and optimizations, refine the API tests
+    - Done
+  * - Work on other demos of the system
+    - Done
+  * - Re-structure the documentation and write an API documentation for the system
+    - Done
+  * - Open source the system
+    - Future
+  * - Work on CI/CD for the system
+    - Future
