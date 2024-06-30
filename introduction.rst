@@ -39,19 +39,43 @@ The areas Envicutor aims to improve
 Isolation
 ---------
 
-We define isolation as the ability of the code execution system to make different submissions unaware of each other, unable to tamper with each other, and unable to tamper with the underlying system. Throughout this report, we discuss suboptimal isolation methods that are used by some code execution systems and how Envicutor handles isolation.
+We define isolation as the ability of the code execution system to make different submissions unaware of each other, unable to tamper with each other, and unable to tamper with the underlying system. Throughout the report, we discuss suboptimal isolation methods that are used by some code execution systems and how Envicutor handles isolation.
 
 Execution limits
 ----------------
 
-We define execution limits as the constraints that a submission is subject to; these include: CPU time, wall (real) time, memory usage, and other constraints. We discuss suboptimal ways some code execution systems use to impose such constraints and how Envicutor imposes them.
+We define execution limits as the constraints that a submission is subject to; these include: CPU time, wall (real) time, memory usage, and other constraints.
+
+Many systems that make use of remote code execution need to impose execution limits on submissions. For example, a competitive programming system needs to ensure the execution time for the competitors' submissions does not exceed the time limit that the judge determined for a certain problem (imposing a CPU-time limit).\ :cite:`codeforces-cpu-time-limit`
+
+We discuss suboptimal ways some code execution systems use to impose such constraints and how Envicutor imposes them.
 
 Execution metrics
 -----------------
 
 We define execution metrics as quantitative and qualitative metrics that provide insights into the behavior and outcomes of a submission. These metrics include: CPU time, wall (real) time, memory usage, exit code, exit signal, standard output, standard error and other metrics.
 
+In the competitive programming system example, the system also needs to know the standard output that executing a submission produced to be able to judge the submission against the test cases. Some competitive programming systems even give the competitors' the ability to see how much CPU-time and memory their submissions consumed.\ :cite:`codeforces-metrics`
+
 Package management
 ------------------
 
 In order to execute a submission written in one or more programming languages, the compilers, the interpreters, and the libraries that are required to run code written in these languages shall exist on the system. We refer to such dependencies as "packages", and to environments containing these dependencies as "runtimes". We discuss how some package management methods that some code execution systems use can be problematic and we introduce a flexible way to manage packages and runtimes.
+
+Project objectives
+******************
+
+Isolation, execution limits and execution metrics
+==================================================
+
+Envicutor makes use of appropriate tools and methods to ensure submissions execute in a truly isolated sandboxed environment while ensuring a low overhead for executing submissions. It also uses these tools to impose execution limits and report the execution metrics. Throughout the report, we discuss the rationale behind our isolation tool selection and the strategies we employ to mitigate its quirks.
+
+Package management
+==================
+
+Envicutor improves the ease with which packages are added to the system and runtimes are set up. Unlike some other code execution systems, a system reboot is not required to add a new runtime, multiple versions of the same package can exist on the system, and packages which have conflicting dependencies can co-exist safely on the same system. We discuss how this is done.
+
+Concurrency
+===========
+
+Throughout the report, we discuss several strategies we use to ensure that multiple submissions can run concurrently on the system without exhausting its resources and without starving each other from resources.
