@@ -162,6 +162,8 @@ From Rust's networking page :cite:`rust-networking-page`:
 
 Our API tests, simulation tests, and demos are written in Node.js because these assets do not require the strict compile-time checks (or compilation in general) provided by Rust.
 
+.. _isolation_tools:
+
 Handling Isolation, execution limits and execution metrics
 ==========================================================
 
