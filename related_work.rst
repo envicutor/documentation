@@ -166,7 +166,7 @@ Web development assignment graders require submissions to bind to specific ports
 Using Isolate without systemd
 -----------------------------
 
-New versions of Isolate use cgroup2 which is an improved way to manage processes' resources in Linux. The following diagram illustrates how cgroup2 works:
+New versions of Isolate use cgroup2 :cite:`cgroup2-documentation` which is an improved way to manage processes' resources in Linux. The following diagram illustrates how cgroup2 works:
 
 .. figure:: figures/cgroup2.png
   :alt: cgroup2
@@ -178,3 +178,35 @@ Initially, Isolate ensured the presence of the "Isolate cgroup" by leveraging a 
 
 To address this, we've developed a custom fork of Isolate that operates independently of systemd. Moreover, we use a container startup script (an entrypoint) to emulate the systemd service's functionality. This approach guarantees the proper initialization of the Isolate cgroup while aligning seamlessly with Docker's lightweight container model.
 
+The following, as of this writing, is the snippet of the startup script we use that is concerned with setting up the cgroup (additional comments are added for illustration):
+
+.. code-block:: bash
+
+  cd /sys/fs/cgroup && \
+  # Create the isolate cgroup
+  mkdir isolate/ && \
+  # Move the init process under the isolate cgroup tree to be able to modify the root cgroup
+  echo 1 > isolate/cgroup.procs && \
+  # Any cgroup created under the root cgroup tree can manage cpu and memory limits in addition to other constraints
+  echo '+cpuset +cpu +io +memory +pids' > cgroup.subtree_control && \
+  cd isolate && \
+  # Make a cgroup under the isolate tree
+  mkdir init && \
+  # Move the init process under the child cgroup to be able to modify the isolate cgroup
+  echo 1 > init/cgroup.procs && \
+  # Any cgroup created under the Isolate cgroup can manage cpu and memory limits
+  echo '+cpuset +memory' > cgroup.subtree_control && \
+  echo "Initialized cgroup"
+
+Judge0 uses cgroup v1 since it is using an older Isolate version as of this writing :cite:`judge0-isolate`.
+
+Deciding between Isolate and NsJail
+-----------------------------------
+
+NsJail is another process isolation tool for Linux :cite:`nsjail-repo`. From NsJail's GitHub repository's README:
+
+  NsJail is a process isolation tool for Linux. It utilizes Linux namespace subsystem, resource limits, and the seccomp-bpf syscall filters of the Linux kernel.
+
+It is used by code execution systems like Sandkasten :cite:`sandkasten-repo`.
+
+Nsjail, however, does not provide ways for limiting the total CPU time via cgroup (only CPU-time-per-second can be limited) that can be used by the submission processes and does not provide a built-in way to report the metrics used by the submission. Hence, we opted to use Isolate since it seems to be better suited for code execution systems like Envicutor.
