@@ -7,6 +7,7 @@ Envicutor Project Documentation
    :numbered:
 
    introduction.rst
+   related_work.rst
 
 .. bibliography::
    :style: unsrt

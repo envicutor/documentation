@@ -33,6 +33,8 @@ The second category is used in programming competition websites and auto-graders
 
 Envicutor fits in the second category of code execution systems.
 
+.. _improvement_areas:
+
 The areas Envicutor aims to improve
 ===================================
 
@@ -165,6 +167,10 @@ Handling Isolation, execution limits and execution metrics
 
 We use Isolate :cite:`isolate-repo` to execute submissions in an isolated sandbox, to impose limits on the submissions and to get the execution metrics. It is used in the International Olympiad in Informatics Contest Management System (IOI CMS) :cite:`cms-homepage` and in code execution systems like Judge0 :cite:`judge0-paper`.
 
+From Isolate's GitHub repository README:
+
+  Isolate is a sandbox built to safely run untrusted executables, like programs submitted by competitors in a programming contest. Isolate gives them a limited-access environment, preventing them from affecting the host system. It takes advantage of features specific to the Linux kernel, like namespaces and control groups.
+
 Package management
 ==================
 
@@ -183,3 +189,14 @@ Containerization and reproducible deployments
 =============================================
 
 We use Docker :cite:`docker-homepage` to ensure we can spin up a reproducible environment that works seamlessly with Nix and Isolate.
+
+Report organization
+*******************
+
+Chapter 2 discusses how different systems handle problems discussed in ":ref:`improvement_areas`" and their similarities and differences with Envicutor. It also highlights some challenges we faced while developing Envicutor and how we overcame them.
+
+Chapter 3 answers the question: "what would a client system need in a code execution system" through illustrating the functional and non-functional requirements of Envicutor and its use case diagram.
+
+Chapter 4 discusses the architecture and design of Envicutor and why certain design decisions were made.
+
+Chapter 5 discusses how we maintain and test Envicutor.
