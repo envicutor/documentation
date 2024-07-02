@@ -358,3 +358,144 @@ If we consider that the following Python program, that does about one million Py
 One million operations can be considered a common number of operations in competitive programming problems test cases. So, aside from performance problems, such overhead will also introduce challenges with setting the time limits on problems (having to account for the cpu time of the nix-shell startup in addition to the cpu time of the submission).
 
 To optimize our environment setup process, we implemented a solution where the ``nix-shell`` command is executed only once after adding the runtime. Adding the runtime is handled by a separate endpoint from the code execution endpoint. We then cache the resulting environment variables by running the ``env`` command within the created Nix environment and saving its output to a file. Before executing a code submission, these cached environment variables are loaded into the environment, eliminating the need to run ``nix-shell`` again.
+
+The following code snippet from Envicutor shows how the ``env`` command is used to get the environment variables of the nix shell while adding a new runtime:
+
+.. code-block:: rust
+  :emphasize-lines: 1,4,12
+
+  let mut cmd = Command::new("env");
+  cmd.arg("-i")
+      .arg("PATH=/bin")
+      .arg(format!("{NIX_BIN_PATH}/nix-shell"))
+      .args(["--timeout".to_string(), installation_timeout.to_string()])
+      .arg(nix_shell_path)
+      .args(["--run", "/bin/bash -c env"]);
+  let cmd_res = cmd.output().await.map_err(|e| {
+      eprintln!("Failed to run nix-shell: {e}");
+      INTERNAL_SERVER_ERROR_RESPONSE.into_response()
+  })?;
+  let stdout = String::from_utf8_lossy(&cmd_res.stdout).to_string();
+  let stderr = String::from_utf8_lossy(&cmd_res.stderr).to_string();
+
+The following snippet shows how the output of the ``env`` command is saved to a file to cache the environment variables:
+
+.. code-block:: rust
+  :emphasize-lines: 4
+
+  let env_script_path = format!("{runtime_dir}/env");
+  crate::fs::write_file_and_set_permissions(
+      &env_script_path,
+      &stdout,
+      Permissions::from_mode(0o755),
+  )
+  .await
+  .map_err(|e| {
+      eprintln!("Failed to write env script: {e}");
+      INTERNAL_SERVER_ERROR_RESPONSE.into_response()
+  })?;
+
+The following snippet shows a part of the process of loading the environment variables into the environment of the submission:
+
+.. code-block:: rust
+  :emphasize-lines: 37
+
+  async fn add_env_vars_from_file(cmd: &mut Command, file_path: &str) -> Result<(), Error> {
+      let env = fs::read_to_string(file_path)
+          .await
+          .map_err(|e| anyhow!("Failed to read environment variables from: {file_path}: {e}"))?;
+      let lines = env.lines();
+
+      let mut line_count = 0;
+      let mut key = String::new();
+      let mut value = String::new();
+      for line in lines {
+          if line.contains('=') {
+              if !key.is_empty() {
+                  cmd.env(&key, &value);
+              }
+              let mut entry: Vec<&str> = line.split('=').collect();
+              value = match entry.pop() {
+                  Some(e) => e.to_string(),
+                  None => {
+                      return Err(anyhow!("Found a bad line in the env file: {file_path}"));
+                  }
+              };
+              key = match entry.pop() {
+                  Some(e) => e.to_string(),
+                  None => {
+                      return Err(anyhow!("Found a bad line in the env file: {file_path}"));
+                  }
+              };
+          } else {
+              value.push('\n');
+              value.push_str(line);
+          }
+          line_count += 1;
+          if line_count % 500 == 0 {
+              yield_now().await;
+          }
+      }
+      cmd.env(&key, &value);
+      Ok(())
+  }
+
+Concurrency
+***********
+
+For reasons discussed in ":ref:`objectives`", only a certain number of submissions shall be allowed to run at a time on the system. This section describes different approaches code execution systems take to ensure that, and the approach that Envicutor takes.
+
+Programmed semaphore in Node.js (Piston)
+========================================
+
+Piston uses a semaphore that is manually programmed in Node.js to limit the number of submissions that can run at a time. The following code snippet in Piston shows the process of a acquiring a semaphore permit with some added comments for illustration :cite:`piston-job-file`:
+
+.. code-block:: javascript
+
+  if (remaining_job_spaces < 1) { // If all semaphore permits are taken
+      this.logger.info(`Awaiting job slot`);
+      await new Promise(resolve => {
+          job_queue.push(resolve);
+      }); // Stay blocked till this promise gets resolved (by releasing a permit in another semaphore)
+  }
+  this.logger.info(`Priming job`);
+  remaining_job_spaces--; // Acquire the semaphore
+
+The following code snippet in Piston shows the process of releasing the semaphore permit after the submission finishes with some added comments for illustration:
+
+.. code-block:: javascript
+
+  async cleanup() {
+      this.logger.info(`Cleaning up job`);
+
+      this.exit_cleanup(); // Run process janitor, just incase there are any residual processes somehow
+      this.close_cleanup();
+      await this.cleanup_filesystem();
+
+      remaining_job_spaces++; // Increase the number of available permits
+      if (job_queue.length > 0) {
+          job_queue.shift()(); // Release the permit (unblock the waiting jobs)
+      }
+  }
+
+Using manually programmed semaphores like this can lead to data races and inefficiencies, particularly if not carefully managed.
+
+Resque workers (Judge0)
+=======================
+
+Judge0 makes use of task queues and workers that pull tasks from these queues using Resque :cite:`resque-homepage`. It provides a way to configure the number of workers that can run concurrently :cite:`judge0-workers`. Such approach helps in scalability since workers can distributed across multiple machines.
+
+Tokio Semaphore and RwLock (Envicutor)
+======================================
+
+Envicutor makes use of the Semaphore :cite:`tokio-semaphore` and RwLock :cite:`tokio-rwlock` objects in Rust's asynchronous runtime: Tokio :cite:`tokio-homepage`. These primitives help manage concurrent access to resources and ensure safety through Rust's ownership system and compile-time checks.
+
+In Envicutor, we ensure that no submissions can run while a runtime installation is in progress. This is to ensure that the resources used by the installation process does not affect the resources needed by the submissions. We also ensure that no two installation processes can run at the same time. This is to avoid concurrency issues with Nix.
+
+To ensure that only one installation can run at a time without any concurrent submissions, an RwLock is used. An RwLock is a synchronization primitive that allows multiple readers but only one writer at a time. During the installation process, a "write lock" is acquired before it begins and released after it ends, ensuring exclusive access for the installation. The submission execution process acquires a "read lock" before it begins and releases it after it ends. Because the read lock is acquired from the same RwLock as the installation, submissions are blocked if there is an ongoing installation, preventing any concurrent submissions during that time. However, if there is no installation in progress, multiple submissions can run concurrently as they only require read locks, allowing them to proceed simultaneously.
+
+We believe such blocking should not cause major performance downsides since runtimes installation is an infrequent operation.
+
+To limit the number of submissions that can run concurrently at a time, we use a Semaphore. A Semaphore is a synchronization primitive that controls access to a shared resource by maintaining a set number of permits. Each submission acquires a permit before it begins and releases it after it ends. If all permits are taken, additional submissions must wait until a permit is released. This ensures that no more than the specified number of submissions can run at the same time, effectively limiting concurrency and preventing resource exhaustion.
+
+Envicutor leaves scalability decisions up to the client system.

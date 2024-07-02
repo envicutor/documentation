@@ -1,21 +1,13 @@
-- What do I want the audience to know?
-  - What a code execution system is
-  - Problems with current code execution systems
-  - How we built a code execution system that attempts to solve these problems
-    - Isolation
-    - Execution limits and metrics
-    - Package installation and dependency management
-    - Concurrency
-  - Testing
-  - Challenges
-    - Security vulnerabilities can slip in easily
-    - No definitive answer to most stuff
+- TODO:
+- try removing clearpages, list of figures
 
-TODO: try removing clearpages
-
-Inflating methods
+- Inflating methods
   - Add diagram to development methodology
   - Describe how you overcame isolate bug
   - Describe more isolation methods that are inapplicable for the application
   - Describe declare -x -> env transition
   - Sequence diagrams illustrating locking and semaphores
+
+- Possible nice to haves
+  - Configurability in relation with other systems
+  - Talk about caching the runtimes in memory in relation with other systems?

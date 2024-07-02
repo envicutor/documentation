@@ -64,6 +64,8 @@ Package management
 
 In order to execute a submission written in one or more programming languages, the compilers, the interpreters, and the libraries that are required to run code written in these languages shall exist on the system. We refer to such dependencies as "packages", and to environments containing these dependencies as "runtimes". We discuss how some package management methods that some code execution systems use can be problematic and we introduce a flexible way to manage packages and runtimes.
 
+.. _objectives:
+
 Project objectives
 ******************
 
@@ -79,6 +81,8 @@ Envicutor improves the ease with which packages are added to the system and runt
 
 Concurrency
 ===========
+
+In order to ensure that all submissions get their fair share of system resources within the specified limits, only a certain number of submissions shall be allowed to run at a time. Otherwise, the system resources (as memory) can be exhausted and some submissions might not be able to make use of them.
 
 Throughout the report, we discuss several strategies we use to ensure that multiple submissions can run concurrently on the system without exhausting its resources and without starving each other from resources.
 
