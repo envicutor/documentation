@@ -296,6 +296,8 @@ The following is a snippet from the Dockerfile of Piston's base Docker image :ci
       libsundials-dev libpcre2-dev && \
       rm -rf /var/lib/apt/lists/*
 
+.. _envicutor_nix:
+
 Runtime packages and their dependencies are installed while running the system and all packages are isolated from each other (Envicutor)
 ========================================================================================================================================
 
@@ -339,6 +341,8 @@ This leads to the following nix file being sent to Envicutor:
         python3
     ];
   }
+
+.. _nix_slow_startup:
 
 Overcoming the slow startup time of nix-shell
 ---------------------------------------------

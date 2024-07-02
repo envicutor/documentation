@@ -8,6 +8,7 @@ Envicutor Project Documentation
 
    introduction.rst
    related_work.rst
+   analysis.rst
 
 .. bibliography::
    :style: unsrt
