@@ -12,7 +12,7 @@ Testing Methodologies
 Our testing approach comprised various methodologies to throughly evaulate the Envicutor's performance and resilience.
 
 Simulation Testing
-==============
+==================
 
 **Objective**: Validate the overall functionality and performance of Envicutor in a realistic environment.
 
