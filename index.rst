@@ -10,6 +10,7 @@ Envicutor Project Documentation
    related_work.rst
    implementation_and_testing.rst
    analysis.rst
+   design.rst
 
 .. bibliography::
    :style: unsrt
