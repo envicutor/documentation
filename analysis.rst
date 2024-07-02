@@ -97,3 +97,14 @@ Package management
 
 - Different versions of the same package can co-exist on Envicutor
 - Packages with conflicting dependencies can co-exist on Envicutor
+
+Use case diagram
+****************
+
+The following use cases represent the functional requirements that a client system can perform. Unlike traditional CRUD (Create, Read, Update, Delete) business applications, where use cases are plentiful and often repetitive, the use cases in the Envicutor are more limited and specialized. This scarcity is due to the system's emphasis on technical concepts and specific functionalities rather than on generic, repetitive operations:
+
+.. figure:: figures/use-case-diagram.png
+  :scale: 80%
+  :alt: use case diagram
+
+  Envicutor's use case diagram
