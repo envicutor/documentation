@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+actor "Client system" as fc
+rectangle Envicutor {
+  usecase "List runtimes" as UC1
+  usecase "Add a new runtime" as UC2
+  usecase "Delete a runtime" as UC3
+  usecase "Update Nix" as UC4
+  usecase "Execute code" as UC5
+}
+fc --> UC1
+fc --> UC2
+fc --> UC3
+fc --> UC4
+fc --> UC5
+@enduml

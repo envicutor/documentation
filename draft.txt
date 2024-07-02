@@ -9,5 +9,6 @@
   - Sequence diagrams illustrating locking and semaphores
 
 - Possible nice to haves
+  - Nix at runtime
   - Configurability in relation with other systems
   - Talk about caching the runtimes in memory in relation with other systems?

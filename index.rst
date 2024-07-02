@@ -9,5 +9,7 @@ Envicutor Project Documentation
    introduction.rst
    related_work.rst
    implementation_and_testing.rst
+   analysis.rst
+
 .. bibliography::
    :style: unsrt
