@@ -146,6 +146,17 @@ Project work plan
   * - Work on CI/CD for the system
     - Future
 
+Development methodology
+***********************
+
+Our development methodology is grounded in an iterative process of optimizing architecture and design through experimentation and prototyping. This approach is necessitated by the inherent complexity of the project, which requires seamless integration with the operating system and various external tools.
+
+Relying solely on a pre-implementation design phase is insufficient to guarantee system correctness, as the interaction with these external factors—such as the operating system and diverse tools—introduces variables that can significantly impact the system's functionality, reliability, performance and security. Therefore, continuous experimentation and design refinement are essential to address and mitigate these external influences, ensuring the development of a robust and reliable system. Such experimentation and refinement are illustrated throughout the report.
+
+During the initial phases of the project, our team adopted a collaborative approach characterized by design meetings and mob programming :cite:`mob-programming`. This strategy ensured that all team members worked on the same task simultaneously, fostering consensus on various design decisions and promoting a comprehensive understanding of the entire system among all participants.
+
+In the later phases of the project, we transitioned to a more autonomous workflow by regularly posting GitHub issues detailing the tasks that needed to be completed. Our team operated in a self-organizing manner, with each member selecting and assigning themselves to the issues they felt most comfortable and skilled at addressing. This approach optimized task distribution based on individual expertise and preference.
+
 Used tools
 **********
 

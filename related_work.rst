@@ -210,3 +210,15 @@ NsJail is another process isolation tool for Linux :cite:`nsjail-repo`. From NsJ
 It is used by code execution systems like Sandkasten :cite:`sandkasten-repo`.
 
 Nsjail, however, does not provide ways for limiting the total CPU time via cgroup (only CPU-time-per-second can be limited) that can be used by the submission processes and does not provide a built-in way to report the metrics used by the submission. Hence, we opted to use Isolate since it seems to be better suited for code execution systems like Envicutor.
+
+Execution limits
+****************
+
+Time limits
+===========
+
+Piston code execution system :cite:`piston-repo` uses the ``timeout`` Linux command and a programmed timeout interval to terminate a process that exceeds its time limit :cite:`piston-timeout`. This method measures wall-time, which is the total elapsed time from start to finish of the process, and does not consider CPU-time, which is the actual time the CPU spends executing the process.
+
+As a result, if multiple submissions are running on the system simultaneously and the CPU is frequently context-switching between them due to the scheduling algorithm, the wall-time will include periods when the process is not being actively executed by the CPU. This can lead to inconsistencies in time-limiting submissions for competitive programming contests. Therefore, the preferred method for limiting the execution time in such contests is to measure CPU-time, as it provides a more accurate representation of the resources consumed by the process. Wall-time limitations are used mainly to ensure that a process does not run indefinitely and cause system hang-ups.
+
+Envicutor and Judge0 provide options to limit both wall-time and CPU-time via their usage of Isolate.
