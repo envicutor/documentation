@@ -11,7 +11,7 @@ Testing Methodologies
 
 Our testing approach comprised various methodologies to throughly evaulate the Envicutor's performance and resilience.
 
-System Testing
+Simulation Testing
 ==============
 
 **Objective**: Validate the overall functionality and performance of Envicutor in a realistic environment.
@@ -19,7 +19,6 @@ System Testing
 **Approach**:
 
 * Deployed the web application to simulate a competitive programming contest, providing a real-world usage scenario for Envicutor.
-*
 * Monitored system performance and response times under normal and peak loads.
 * Assessed the system's ability to handle various types of submissions, including correct solutions, incorrect solutions, and edge cases.
 * Ran a Python script that continuously sends malicious code during the contest to test Envicutor's resilience against harmful inputs and its ability to maintain integrity under attack.
