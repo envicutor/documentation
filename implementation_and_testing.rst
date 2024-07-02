@@ -19,11 +19,21 @@ System Testing
 **Approach**:
 
 * Deployed the web application to simulate a competitive programming contest, providing a real-world usage scenario for Envicutor.
+*
 * Monitored system performance and response times under normal and peak loads.
 * Assessed the system's ability to handle various types of submissions, including correct solutions, incorrect solutions, and edge cases.
 * Ran a Python script that continuously sends malicious code during the contest to test Envicutor's resilience against harmful inputs and its ability to maintain integrity under attack.
 
 **Screenshots**:
+
+The following screenshot shows a simulated contest's results and the verdicts returned by Envicutor against the original verdicts of their respective submissions on Codeforces, where we gathered our dataset.
+
+.. figure:: figures/contest_result.png
+  :alt: Contest Result Page
+
+  Contest Result
+
+
 
 
 API Testing
@@ -39,3 +49,40 @@ API Testing
 * Conducted automated tests to ensure the API handles valid and invalid requests appropriately.
 
 * Evaulated the API's performance under concurrent access conditions.
+
+.. figure:: figures/add_runtime.png
+  :alt: Add Runtime Page
+
+  Adding a runtime environment
+
+.. figure:: figures/runtime_added.png
+  :alt: Runtime added
+
+  Runtime Added successfully
+
+.. figure:: figures/runtime_used.png
+  :alt: Runtime in use
+
+  Runtime environment being used
+
+Security Testing
+================
+
+**Objective**: Ensure that Envicutor can handle malicious inputs and maintain system integrity.
+
+
+**Approach**:
+
+* Injected malicious submissions during the contest simulation to test the system's resilience against code injection, infinite loops, and resource exhaustion attacks.
+* Implemented sandboxing and resource-limiting measures to contain and mitigate the impact of malicious code.
+
+
+Stress Testing
+==============
+
+**Objective**: Ensure that Envicutor can operate normally and efficiently under increased work loads.
+
+
+**Approach**:
+
+* Implemented a script that sends 5000 concurrent Python submissions and 300 C++ submissions in parallel.
