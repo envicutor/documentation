@@ -8,6 +8,6 @@ Envicutor Project Documentation
 
    introduction.rst
    related_work.rst
-
+   implementation_and_testing.rst
 .. bibliography::
    :style: unsrt
