@@ -7,7 +7,7 @@ Motivation
 Why did we create Envicutor?
 ============================
 
-Having studied multiple open source code execution systems for the past two years, we started to notice the strengths and weaknesses of many of them. We aim to combine the strengths we have observed and avoid the weaknesses while introducing new methods of solving common problems through a new code execution system.
+Having studied multiple open source code execution systems for the past three years, we started to notice the strengths and weaknesses of many of them. We aim to combine the strengths we have observed and avoid the weaknesses while introducing new methods of solving common problems through a new code execution system.
 
 Why a code execution system?
 ============================
@@ -149,9 +149,9 @@ Project work plan
 Development methodology
 ***********************
 
-Our development methodology is grounded in an iterative process of optimizing architecture and design through experimentation and prototyping. This approach is necessitated by the inherent complexity of the project, which requires seamless integration with the operating system and various external tools.
+Our development methodology is grounded in an iterative process of optimizing architecture and design through experimentation and prototyping. This approach is necessitated by the the fact that Envicutor is based on integration with the operating system and various external tools.
 
-Relying solely on a pre-implementation design phase is insufficient to guarantee system correctness, as the interaction with these external factors—such as the operating system and diverse tools—introduces variables that can significantly impact the system's functionality, reliability, performance and security. Therefore, continuous experimentation and design refinement are essential to address and mitigate these external influences, ensuring the development of a robust and reliable system. Such experimentation and refinement are illustrated throughout the report.
+Relying solely on a pre-implementation design phase is insufficient to guarantee system robustness, as the interaction with these external factors—such as the operating system and diverse tools—introduces variables that can impact the system's functionality, reliability, performance and security. Therefore, continuous experimentation and design refinement are essential to address and mitigate these external influences. Such experimentation and refinement are illustrated throughout the report.
 
 During the initial phases of the project, our team adopted a collaborative approach characterized by design meetings and mob programming :cite:`mob-programming`. This strategy ensured that all team members worked on the same task simultaneously, fostering consensus on various design decisions and promoting a comprehensive understanding of the entire system among all participants.
 
@@ -183,6 +183,8 @@ We use Isolate :cite:`isolate-repo` to execute submissions in an isolated sandbo
 From Isolate's GitHub repository README:
 
   Isolate is a sandbox built to safely run untrusted executables, like programs submitted by competitors in a programming contest. Isolate gives them a limited-access environment, preventing them from affecting the host system. It takes advantage of features specific to the Linux kernel, like namespaces and control groups.
+
+.. _nix_package_management:
 
 Package management
 ==================

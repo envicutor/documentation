@@ -17,4 +17,5 @@ Inflating methods
   - Add diagram to development methodology
   - Describe how you overcame isolate bug
   - Describe more isolation methods that are inapplicable for the application
+  - Describe declare -x -> env transition
   - Sequence diagrams illustrating locking and semaphores

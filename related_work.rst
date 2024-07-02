@@ -163,6 +163,8 @@ Having a per-submission loopback interface
 
 Web development assignment graders require submissions to bind to specific ports on localhost. This binding is accomplished through Linux network interfaces known as loopback interfaces. Envicutor, utilizing an updated version of Isolate, can create an isolated loopback interface for each submission (without the ``--share-net`` option). As of this writing, this capability is not available on Judge0 because it uses an older version of Isolate.
 
+.. _isolate_systemd:
+
 Using Isolate without systemd
 -----------------------------
 
@@ -222,3 +224,137 @@ Piston code execution system :cite:`piston-repo` uses the ``timeout`` Linux comm
 As a result, if multiple submissions are running on the system simultaneously and the CPU is frequently context-switching between them due to the scheduling algorithm, the wall-time will include periods when the process is not being actively executed by the CPU. This can lead to inconsistencies in time-limiting submissions for competitive programming contests. Therefore, the preferred method for limiting the execution time in such contests is to measure CPU-time, as it provides a more accurate representation of the resources consumed by the process. Wall-time limitations are used mainly to ensure that a process does not run indefinitely and cause system hang-ups.
 
 Envicutor and Judge0 provide options to limit both wall-time and CPU-time via their usage of Isolate.
+
+Memory limits
+=============
+
+Piston code execution system uses the ``prlimit`` system command with the ``--as`` option to limit the amount of memory a process can allocate :cite:`piston-as`. This approach, however, enforces the memory limits on the processes and their children individually.
+
+This can be suboptimal in some client systems which might want to limit that total memory that is used by a submission. Client systems that wish to limit the total memory usage will either have to limit the total number of processes in a submission to 1 or to ensure that ``max_number_of_processes * memory_limit = total_limit``. Both options can be constraining.
+
+Envicutor and Judge0 provide an option to limit the total used memory through their usage of cgroup via Isolate. Though, Envicutor uses cgroup v2 while Judge0 uses cgroup v1 as discussed in ":ref:`isolate_systemd`".
+
+Execution metrics
+=================
+
+Piston only reports standard output, standard error, exit signal and exit code :cite:`piston-metrics`. Envicutor and Judge0 add performance metrics such as cpu time, wall time and memory. These metrics are reported by Isolate and can be useful as described in ":ref:`improvement_areas`".
+
+Package installation and runtimes management
+********************************************
+
+This section describes different approaches code execution systems use to manage package installation and managing runtimes as explained in :ref:`improvement_areas`, and the approach Envicutor uses.
+
+All the runtime packages and dependencies are baked in the Docker image (Judge0)
+================================================================================
+
+Judge0 specifies the packages that are needed for the runtimes of the code execution system in its system's docker image :cite:`judge0-base-docker-image`.
+The implications of such method is that a system reboot is needed to add new packages, and build/runtimes dependencies that a package requires need to be installed globally on the system. This can be problematic if two packages have conflicting dependencies.
+
+For example, notice how the dependencies for the Octave programming language are installed globally using the ``apt`` package manager in the following snippet from the Dockerfile of the base docker image:
+
+.. code-block:: dockerfile
+  :emphasize-lines: 5
+
+  ENV OCTAVE_VERSIONS \
+        5.1.0
+  RUN set -xe && \
+      apt-get update && \
+      apt-get install -y --no-install-recommends gfortran libblas-dev liblapack-dev libpcre3-dev && \
+      rm -rf /var/lib/apt/lists/* && \
+      for VERSION in $OCTAVE_VERSIONS; do \
+        curl -fSsL "https://ftp.gnu.org/gnu/octave/octave-$VERSION.tar.gz" -o /tmp/octave-$VERSION.tar.gz && \
+        mkdir /tmp/octave-$VERSION && \
+        tar -xf /tmp/octave-$VERSION.tar.gz -C /tmp/octave-$VERSION --strip-components=1 && \
+        rm /tmp/octave-$VERSION.tar.gz && \
+        cd /tmp/octave-$VERSION && \
+        ./configure \
+          --prefix=/usr/local/octave-$VERSION && \
+        make -j$(nproc) && \
+        make -j$(nproc) install && \
+        rm -rf /tmp/*; \
+      done
+
+In this example, several packages required for building Octave, such as ``gfortran``, ``libblas-dev``, ``liblapack-dev``, and ``libpcre3-dev``, are installed using apt-get. The curl command is then used to download the Octave source code, which is subsequently compiled and installed.
+
+However, this method can pose challenges. For instance, if another language or tool requires a different version of ``liblapack-dev``, it could lead to conflicts and potentially break existing setups.
+
+Runtime packages are installed while running the system, dependencies are baked in the Docker image (Piston)
+============================================================================================================
+
+Piston allows pre-compiled binaries of the packages required for the runtime to be downloaded while the code execution system is running :cite:`piston-runtime-installation`. This solves the problem of having to reboot a system to add a new runtime, but still does not solve the problem of having the dependencies for running the packages of the runtime installed globally on the system.
+
+The following is a snippet from the Dockerfile of Piston's base Docker image :cite:`piston-dockerfile`:
+
+.. code-block:: dockerfile
+
+  RUN apt-get update && \
+      apt-get install -y libxml2 gnupg tar coreutils util-linux libc6-dev \
+      binutils build-essential locales libpcre3-dev libevent-dev libgmp3-dev \
+      libncurses6 libncurses5 libedit-dev libseccomp-dev rename procps python3 \
+      libreadline-dev libblas-dev liblapack-dev libpcre3-dev libarpack2-dev \
+      libfftw3-dev libglpk-dev libqhull-dev libqrupdate-dev libsuitesparse-dev \
+      libsundials-dev libpcre2-dev && \
+      rm -rf /var/lib/apt/lists/*
+
+Runtime packages and their dependencies are installed while running the system and all packages are isolated from each other (Envicutor)
+========================================================================================================================================
+
+As explained in ":ref:`nix_package_management`", Envicutor uses Nix to handle runtime installation while the system is running. Nix operates in such a way that all packages and their dependencies are isolated from each other and that packages with different dependencies can co-exist on the same system :cite:`nix-phd`.
+
+The client system passes a "nix shell file" :cite:`nix-shell-docs` (shell.nix) to Envicutor, specifies the runtime name, the compile command, the run command, and the main source file name, and Envicutor handles setting up this runtime. The following pseudocode is an example of a request that is sent to Envicutor to have a Python runtime available:
+
+.. code-block::
+
+  sendRequest('POST', `${BASE_URL}/runtimes`, {
+        name: 'Python',
+        nix_shell: `
+  { pkgs ? import (
+    fetchTarball {
+      url="https://github.com/NixOS/nixpkgs/archive/72da83d9515b43550436891f538ff41d68eecc7f.tar.gz";
+      sha256="177sws22nqkvv8am76qmy9knham2adfh3gv7hrjf6492z1mvy02y";
+    }
+  ) {} }:
+  pkgs.mkShell {
+    nativeBuildInputs = with pkgs; [
+        python3
+    ];
+  }`,
+        compile_script: '',
+        run_script: 'python3 main.py',
+        source_file_name: 'main.py'
+      })
+
+This leads to the following nix file being sent to Envicutor:
+
+.. code-block:: nix
+
+  { pkgs ? import (
+    fetchTarball {
+      url="https://github.com/NixOS/nixpkgs/archive/72da83d9515b43550436891f538ff41d68eecc7f.tar.gz";
+      sha256="177sws22nqkvv8am76qmy9knham2adfh3gv7hrjf6492z1mvy02y";
+    }
+  ) {} }:
+  pkgs.mkShell {
+    nativeBuildInputs = with pkgs; [
+        python3
+    ];
+  }
+
+Overcoming the slow startup time of nix-shell
+---------------------------------------------
+
+Since Nix packages are isolated from each other and from the global execution environment, the ``nix-shell`` command must be used to make the packages specified in the ``shell.nix`` file available in the current environment (even if the Nix packages are downloaded on the system).
+
+The problem is that Nix needs to do a lot of computations in order to parse the packages in ``shell.nix``, identify where they point to on the system and download non-existing packages. For example, running the ``nix-shell`` command on the previous nix file containing the python package takes about 650 milliseconds to make the environment available on the machine of the author of this part of the document (with the Nix Python packages already downloaded).
+
+If we consider that the following Python program, that does about one million Python operations, takes 150 milliseconds on the same machine, we can see how large of an overhead the ``nix-shell`` command becomes:
+
+.. code-block:: python
+
+  i = 0
+  for i in range(1000000):
+      i += 1
+
+One million operations can be considered a common number of operations in competitive programming problems test cases. So, aside from performance problems, such overhead will also introduce challenges with setting the time limits on problems (having to account for the cpu time of the nix-shell startup in addition to the cpu time of the submission).
+
+To optimize our environment setup process, we implemented a solution where the ``nix-shell`` command is executed only once after adding the runtime. Adding the runtime is handled by a separate endpoint from the code execution endpoint. We then cache the resulting environment variables by running the ``env`` command within the created Nix environment and saving its output to a file. Before executing a code submission, these cached environment variables are loaded into the environment, eliminating the need to run ``nix-shell`` again.
