@@ -22,6 +22,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 latex_elements = {
   'maxlistdepth': '99',
+  'pointsize': '11pt',
   'figure_align': 'H',
   'preamble': r"""
 %% --------------------------------------------------
