@@ -16,8 +16,8 @@ Runtimes and Nix
 
   - The name of the runtime to add
   - The Nix shell that is required to make the packages available in the environment of the runtime as described in ":ref:`envicutor_nix`"
-  - The compile script (if any) that is required to compile submissions' code using this runtime
-  - The run script that is required to run submissions' code using this runtime
+  - The compile script (if any) that is required to compile submission's code using this runtime
+  - The run script that is required to run submission's code using this runtime
   - The name of the main source file that shall be given to the submitted code in single-file submissions
 
 - The client system shall be able to delete runtimes that were added on Envicutor
@@ -59,10 +59,10 @@ Submissions execution
     - SG: indicating that the process died on a signal
     - TO: indicating that the process exceeded either the CPU or the wall time limit
     - XX: indicating an internal error of the sandbox
-  - The standard output that the submission processes' produced
-  - The standard error that the submission processes' produced
-  - The CPU time consumed by the submission. The CPU time is the amount of time the CPU was actually working on the submissions' processes. This excludes time in which the CPU context-switched to other processes due to scheduling, idle time, and blocked time (waiting for external IO resources)
-  - The wall time consumed by the submission. The wall time is the total amount of time that the submissions' processes stayed on the system whether or not the CPU was working on them for the entirety of this period
+  - The standard output that the submission processes produced
+  - The standard error that the submission processes produced
+  - The CPU time consumed by the submission. The CPU time is the amount of time the CPU was actually working on the submission's processes. This excludes time in which the CPU context-switched to other processes due to scheduling, idle time, and blocked time (waiting for external IO resources)
+  - The wall time consumed by the submission. The wall time is the total amount of time that the submission's processes stayed on the system whether or not the CPU was working on them for the entirety of this period
 
 Non-functional requirements
 ===========================
@@ -77,7 +77,7 @@ Isolation and security
   - Read sensitive data on the host system (Envicutor)
   - Write any residual files on the host system (Envicutor)
   - Gain knowledge of any other processes running on the host system (Envicutor)
-  - Affect each others' CPU time
+  - Affect each others CPU time
   - Starve each other from memory, file descriptors, or number of processes (with a properly configured system)
   - Exceed the limits specified in the execution request (if any), or the system limits
 
