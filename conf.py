@@ -13,7 +13,7 @@ author = 'Ahmed Wael, Adham Hazem, Omar Brikaa, Mostafa Ahmed, Ali Esmat'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.todo', 'sphinxcontrib.bibtex']
+extensions = ['sphinx.ext.todo', 'sphinxcontrib.bibtex', 'sphinxcontrib.openapi']
 todo_include_todos = True
 bibtex_bibfiles = ['refs.bib']
 

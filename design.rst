@@ -99,3 +99,288 @@ Executing code
   :alt: code execution sequence diagram
 
   Sequence diagram for executing code (submissions)
+
+OpenAPI specification
+*********************
+
+The following OpenAPI specification describes Envicutor's API as of this writing:
+
+.. openapi:: ./api.yml
+  :examples:
+
+.. code-block:: yaml
+
+  openapi: 3.0.0
+  info:
+    title: Envicutor API
+    version: 0.0.1
+  paths:
+    /health:
+      get:
+        summary: Health check endpoint
+        responses:
+          '200':
+            description: OK
+            content:
+              text/plain:
+                schema:
+                  type: string
+                  example: "Up and running"
+
+    /runtimes:
+      get:
+        summary: List all runtimes
+        responses:
+          '200':
+            description: A list of runtimes
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Runtime'
+
+      post:
+        summary: Install a new runtime
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddRuntimeRequest'
+        responses:
+          '200':
+            description: Installation successful
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InstallationResponse'
+          '400':
+            description: Bad request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/BadRequestResponse'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+    /runtimes/{id}:
+      delete:
+        summary: Delete a runtime
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Deletion successful
+          '400':
+            description: Bad request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+    /update:
+      post:
+        summary: Update Nix packages
+        responses:
+          '200':
+            description: Update successful
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InstallationResponse'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/InstallationResponse'
+
+    /execute:
+      post:
+        summary: Execute code using a specified runtime
+        parameters:
+          - name: is_project
+            in: query
+            required: false
+            schema:
+              type: boolean
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionRequest'
+        responses:
+          '200':
+            description: Execution result
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ExecutionResponse'
+          '500':
+            description: Internal Server Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorMessage'
+
+  components:
+    schemas:
+      AddRuntimeRequest:
+        type: object
+        properties:
+          name:
+            type: string
+          nix_shell:
+            type: string
+          compile_script:
+            type: string
+          run_script:
+            type: string
+          source_file_name:
+            type: string
+        required:
+          - name
+          - nix_shell
+          - compile_script
+          - run_script
+          - source_file_name
+
+      InstallationResponse:
+        type: object
+        properties:
+          stdout:
+            type: string
+          stderr:
+            type: string
+
+      ExecutionRequest:
+        type: object
+        properties:
+          runtime_id:
+            type: integer
+          source_code:
+            type: string
+          input:
+            type: string
+            nullable: true
+          compile_limits:
+            allOf:
+              - $ref: '#/components/schemas/Limits'
+            nullable: true
+          run_limits:
+            allOf:
+              - $ref: '#/components/schemas/Limits'
+            nullable: true
+        required:
+          - runtime_id
+          - source_code
+
+      ExecutionResponse:
+        type: object
+        properties:
+          extract:
+            allOf:
+              - $ref: '#/components/schemas/StageResult'
+            nullable: true
+          compile:
+            allOf:
+              - $ref: '#/components/schemas/StageResult'
+            nullable: true
+          run:
+            allOf:
+              - $ref: '#/components/schemas/StageResult'
+            nullable: true
+
+      Runtime:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+
+      Limits:
+        type: object
+        properties:
+          wall_time:
+            type: integer
+            nullable: true
+          cpu_time:
+            type: integer
+            nullable: true
+          memory:
+            type: integer
+            nullable: true
+          extra_time:
+            type: integer
+            nullable: true
+          max_open_files:
+            type: integer
+            nullable: true
+          max_file_size:
+            type: integer
+            nullable: true
+          max_number_of_processes:
+            type: integer
+            nullable: true
+
+      StageResult:
+        type: object
+        properties:
+          memory:
+            type: integer
+            nullable: true
+          exit_code:
+            type: integer
+            nullable: true
+          exit_signal:
+            type: integer
+            nullable: true
+          exit_message:
+            type: string
+            nullable: true
+          exit_status:
+            type: string
+            nullable: true
+          stdout:
+            type: string
+          stderr:
+            type: string
+          cpu_time:
+            type: integer
+            nullable: true
+          wall_time:
+            type: integer
+            nullable: true
+
+      ErrorMessage:
+        type: object
+        properties:
+          message:
+            type: string
+
+      BadRequestResponse:
+        type: object
+        properties:
+          stdout:
+            type: string
+            nullable: true
+          stderr:
+            type: string
+            nullable: true
