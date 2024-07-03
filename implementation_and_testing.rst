@@ -32,6 +32,7 @@ The following screenshot shows a simulated contest's results and the verdicts re
 
   Contest Result
 
+The following screenshots show the addition of a runtime.
 
 .. figure:: figures/add_runtime.png
   :alt: Add Runtime Page
@@ -248,14 +249,3 @@ Security Testing
 
 * Injected malicious submissions during contest simulations to test resilience against code injection, infinite loops, and resource exhaustion.
 
-
-Stress Testing
-==============
-
-**Objective**: Evaluate Envicutor's performance under increased workloads.
-
-
-**Approach**:
-
-* Implemented scripts to submit 5000 concurrent Python and 300 C++ submissions simultaneously.
-* Monitored system behavior and performance metrics during stress tests.
