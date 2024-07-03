@@ -4,7 +4,7 @@ Implementation and Testing
 Introduction
 ***************
 
-This section outlines the testing methodologies and implementation strategies employed to ensure the robustness and reliability of Envicutor. To validate its effectiveness, a web application simulating a coding contest environment was developed, allowing real-world testing under various conditions including concurrent submissions and handling of malicious inputs.
+This section outlines the testing methodologies and implementation strategies employed to ensure the robustness and reliability of Envicutor.
 
 Testing Methodologies
 *********************
@@ -14,14 +14,13 @@ Various methodologies were employed to comprehensively evaluate Envicutor's perf
 Simulation Testing
 ==================
 
-**Objective**: Validate Envicutor's functionality and performance in a realistic environment.
+**Objective**: validate Envicutor's functionality and performance in a realistic environment.
 
 **Approach**:
 
-* Deployed the web application to simulate a competitive programming contest, replicating real-world usage scenarios.
-* Monitored system performance and response times under normal and peak loads.
-* Evaluated Envicutor's ability to handle correct solutions, incorrect submissions, and edge cases.
-* Conducted tests using a Python script to simulate malicious inputs during the contest, assessing Envicutor's resilience and integrity.
+* Developed a web application that simulates a real programming contest and uses Envicutor as its code execution system.
+* Evaluated Envicutor's ability to handle code execution, and various resource limits.
+* Developed a Python script to simulate malicious inputs during the contest, assessing Envicutor's resilience.
 
 **Screenshots**:
 
@@ -30,9 +29,9 @@ The following screenshot shows a simulated contest's results and the verdicts re
 .. figure:: figures/contest_result.png
   :alt: Contest Result Page
 
-  Contest Result
+  Contest result
 
-The following screenshots show the addition of a runtime.
+The following screenshots show the addition of a new runtime through the simulation web application.
 
 .. figure:: figures/add_runtime.png
   :alt: Add Runtime Page
@@ -42,7 +41,7 @@ The following screenshots show the addition of a runtime.
 .. figure:: figures/runtime_added.png
   :alt: Runtime added
 
-  Runtime Added successfully
+  Runtime added successfully
 
 .. figure:: figures/runtime_used.png
   :alt: Runtime in use
@@ -54,14 +53,12 @@ The following screenshots show the addition of a runtime.
 API Testing
 ============
 
-**Objective**: Validate Envicutor's functionality and performance through API interactions.
+**Objective**: validate Envicutor's functionality and concurrency-handling.
 
 
 **Approach**:
 
-* Developed NodeJs scripts to perform comprehensive API testing, covering all endpoints and typical usage scenarios.
-
-* Conducted automated tests to ensure the API handles valid and invalid requests appropriately.
+* Developed Node.js scripts to perform comprehensive API testing, covering all endpoints and typical usage scenarios.
 
 * Evaluated the API's performance under concurrent access conditions.
 
@@ -109,9 +106,8 @@ API Testing
 #. Execute erroneous Python code
     Check if Envicutor can handle run errors.
 #. Install Bash
-    Checks that Envicutor can install Bash correctly.
 #. Create a directory that can't be removed
-    Checks that Envicutor can create and change permissions of the directory to only be deleted by the owner.
+    Checks that Envicutor can create and change permissions of the directory even if the submission modified its permissions.
 #. Execute over-cpu-time limit Python code
     Checks that Envicutor can handle code that exceeds the time limit and asserts that exit status refers to time out.
 #. Execute over-memory-limit C++ code
@@ -155,32 +151,28 @@ API Testing
 #. Execute Python code with invalid run max_number_of_processes
     Checks that Envicutor can handle submissions with invalid max number of processes.
 #. Make a runtime for multi-file Python projects that run through first.py
-    Checks if envicutor can add a multi-file Python runtime.
 #. Make a runtime for multi-file C++ projects that run through first.cpp
-    Checks if envicutor can add a multi-file C++ runtime.
 #. Execute a multi-file Python project
-    Checks if envicutor can execute a multi-file Python project.
+    Checks if Envicutor can execute a multi-file project in a runtime that does not require compilation.
 #. Execute a multi-file C++ project
-    Checks if envicutor can execute a multi-file C++ project.
+    Checks if Envicutor can execute a multi-file project in a runtime that requires compilation.
 
 **Concurrency.js**
 
-
 #. Executing MAX_CONCURRENT_SUBMISSIONS Python submissions in parallel
-    Checks if Envicutor can execute MAX_CONCURRENT_SUBMISSIONS Python submissions in parallel.
+    Checks if Envicutor can execute MAX_CONCURRENT_SUBMISSIONS Python submissions in parallel (nothing should be blocked).
 #. Executing MAX_CONCURRENT_SUBMISSIONS * 2 Python submissions in parallel (the second MAX_CONCURRENT_SUBMISSIONS should be blocked for some time)
-    Checks if Envicutor can handle MAX_CONCURRENT_SUBMISSIONS * 2 Python submissions in parallel.
+    Checks if Envicutor correctly blocks half of the submissions in case they were double the number of the maximum concurrent submissions.
 #. Executing MAX_CONCURRENT_SUBMISSIONS * 2 C++ submissions in parallel (the second MAX_CONCURRENT_SUBMISSIONS should be blocked for some time)
-    Checks if Envicutor can handle MAX_CONCURRENT_SUBMISSIONS * 2 C++ submissions in parallel.
+    Same as above but for a runtime that requires compilation.
 #. Executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions after a package installation has started (they should start after the installation)
-    Checks if Envicutor can execute Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions after a package installation has started.
+    Checks if Envicutor correctly blocks submissions while a package installation is running as described in ":ref:`concurrency`".
 #. Running a package installation after executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions has started (it should start after the executions finish)
-    Checks if Envicutor can install a package after executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions in parallel.
+    Checks if Envicutor can correctly block package installations while executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions in parallel as described in ":ref:`concurrency`".
 #. Running a package installation after another installation has started (it should start after the installation finishes)
-    Checks if Envicutor can install a package after another installation has started.
+    Checks if Envicutor can correctly block package installations while another one is running as described in ":ref:`concurrency`".
 #. Getting the available runtimes while an installation is running (should not be blocked)
-    Checks if Envicutor can get the available runtimes while an installation is running.
-    
+
 **stress.js**
 
 #. Executing 5000 Python submissions in parallel
@@ -210,7 +202,7 @@ API Testing
           assert.equal(body.run.stderr, '');
         }
 #. Executing 300 C++ submissions in parallel
-    This test evaluates the performance of Envicutor when executing multiple C++ submissions in parallel.
+    This test evaluates the reliability of Envicutor when executing multiple C++ submissions (a runtime that requires compilation) in parallel.
 
     .. code-block:: javascript
 
@@ -238,14 +230,3 @@ API Testing
         assert.equal(body.run.stdout, 'Hello world\n');
         assert.equal(body.run.stderr, '');
       }
-
-Security Testing
-================
-
-**Objective**: Ensure Envicutor's resilience against malicious inputs and maintain system integrity.
-
-
-**Approach**:
-
-* Injected malicious submissions during contest simulations to test resilience against code injection, infinite loops, and resource exhaustion.
-

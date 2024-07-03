@@ -444,6 +444,8 @@ The following snippet shows a part of the process of loading the environment var
       Ok(())
   }
 
+.. _concurrency:
+
 Concurrency
 ***********
 
