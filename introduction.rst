@@ -57,7 +57,7 @@ Execution metrics
 
 We define execution metrics as quantitative and qualitative metrics that provide insights into the behavior and outcomes of a submission. These metrics include: CPU time, wall (real) time, memory usage, exit code, exit signal, standard output, standard error and other metrics.
 
-In the competitive programming system example, the system also needs to know the standard output that executing a submission produced to be able to judge the submission against the test cases. Some competitive programming systems even give the competitors' the ability to see how much CPU-time and memory their submissions consumed :cite:`codeforces-metrics`.
+In the competitive programming system example, the system also needs to know the standard output that executing a submission produced to be able to judge the submission against the test cases. Some competitive programming systems even give the competitors the ability to see how much CPU-time and memory their submissions consumed :cite:`codeforces-metrics`.
 
 Package management
 ------------------
