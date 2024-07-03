@@ -23,6 +23,8 @@ Runtimes and Nix
 - The client system shall be able to delete runtimes that were added on Envicutor
 - The client system shall be able to update the installation of the Nix package manager on Envicutor while Envicutor is running
 
+.. _configuration:
+
 Configuration
 -------------
 
