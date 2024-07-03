@@ -102,53 +102,84 @@ API Testing
 **Complex.js**
 
 #. Check the environment variables in python
-    Simple Python code which tests that environment variables are correctly set.
+    Check if environment variables are correctly set.
 #. Execute C++ with compile error
-    Simple C++ code that tests how Envicutor handles code submissions which fail to compile.
+    Check if Envicutor can handle compile errors.
 #. Execute erroneous Python code
-    Simple Python code that tests how Envicutor handles code submissions which contain a syntax error.
+    Check if Envicutor can handle run errors.
 #. Install Bash
-    A request that tests if Envicutor can handle installation of Bash runtime.
+    Checks that Envicutor can install Bash correctly.
 #. Create a directory that can't be removed
-    Bash command that tests if Envicutor can create and change permissions of the directory to only be deleted by the owner.
+    Checks that Envicutor can create and change permissions of the directory to only be deleted by the owner.
 #. Execute over-cpu-time limit Python code
-    Simple Python code that tests how Envicutor handles code that exceeds the time limit and asserts that exit status refers to time out.
+    Checks that Envicutor can handle code that exceeds the time limit and asserts that exit status refers to time out.
 #. Execute over-memory-limit C++ code
+    Checks that Envicutor can handle code that exceeds the memory limit and asserts that exit status refers to memory limit.
 #. Execute under-memory-limit C++ code
+    Checks that Envicutor can handle code that is under the memory limit and it runs successfully.
 #. Execute over-wall-time-limit Python code
+    Checks that Envicutor can handle code that exceeds the wall limit.
 #. Execute below-wall-time-limit Python code
+    Checks that Envicutor can handle submissions that are under the wall limit and it runs successfully.
 #. Execute over-number-of-processes-limit Python code
+    Checks that Envicutor can handle submissions that exceeds the number of processes limit.
 #. Execute below-number-of-processes-limit Python code
+    Checks that Envicutor can handle submissions that are under the number of processes limit and it runs successfully.
 #. Execute above-number-of-processes-limit Python code
+    Checks that Envicutor can handle submissions that exceeds the number of processes limit.
 #. Execute above-number-of-processes-limit Python code using threads
+    Checks that Envicutor can handle submissions that exceeds the number of processes limit with threading.
 #. Abort mid-submission (should not cause Envicutor errors)
+    Checks that Envicutor can handle submissions that are aborted mid-submission.
 #. Execute Python code with invalid run wall_time
+    Checks that Envicutor can handle submissions with invalid wall time.
 #. Execute Python code with invalid run cpu_time
+    Checks that Envicutor can handle submissions with invalid cpu time.
 #. Execute Python code with invalid run memory
+    Checks that Envicutor can handle submissions with invalid memory.
 #. Execute Python code with invalid run extra_time
+    Checks that Envicutor can handle submissions with invalid extra time.
 #. Execute Python code with invalid run max_open_files
+    Checks that Envicutor can handle submissions with invalid max open files.
 #. Execute Python code with a higher max_open_files limit (should not be able to open all of them)
+    Checks that Envicutor can handle submissions that has more files than the max open files limit.
 #. Execute Python code with a lower max_open_files limit
+    Checks that Envicutor can handle submissions that has less files than the max open files limit and it runs succcessfully.
 #. Execute Python code with invalid run max_file_size
+    Checks that Envicutor can handle submissions with invalid max file size.
 #. Execute over-file-size-limit Python code
+    Checks that Envicutor can handle submissions that exceeds the file size limit.
 #. Execute under-file-size-limit Python code
+    Checks that Envicutor can handle submissions that is under the file size limit and it runs successfully.
 #. Execute Python code with invalid run max_number_of_processes
+    Checks that Envicutor can handle submissions with invalid max number of processes.
 #. Make a runtime for multi-file Python projects that run through first.py
+    Checks if envicutor can add a multi-file Python runtime.
 #. Make a runtime for multi-file C++ projects that run through first.cpp
+    Checks if envicutor can add a multi-file C++ runtime.
 #. Execute a multi-file Python project
+    Checks if envicutor can execute a multi-file Python project.
 #. Execute a multi-file C++ project
+    Checks if envicutor can execute a multi-file C++ project.
 
 **Concurrency.js**
 
 
 #. Executing MAX_CONCURRENT_SUBMISSIONS Python submissions in parallel
+    Checks if Envicutor can execute MAX_CONCURRENT_SUBMISSIONS Python submissions in parallel.
 #. Executing MAX_CONCURRENT_SUBMISSIONS * 2 Python submissions in parallel (the second MAX_CONCURRENT_SUBMISSIONS should be blocked for some time)
+    Checks if Envicutor can handle MAX_CONCURRENT_SUBMISSIONS * 2 Python submissions in parallel.
 #. Executing MAX_CONCURRENT_SUBMISSIONS * 2 C++ submissions in parallel (the second MAX_CONCURRENT_SUBMISSIONS should be blocked for some time)
+    Checks if Envicutor can handle MAX_CONCURRENT_SUBMISSIONS * 2 C++ submissions in parallel.
 #. Executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions after a package installation has started (they should start after the installation)
+    Checks if Envicutor can execute Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions after a package installation has started.
 #. Running a package installation after executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions has started (it should start after the executions finish)
+    Checks if Envicutor can install a package after executing Math.ceil(MAX_CONCURRENT_SUBMISSIONS / 2) submissions in parallel.
 #. Running a package installation after another installation has started (it should start after the installation finishes)
+    Checks if Envicutor can install a package after another installation has started.
 #. Getting the available runtimes while an installation is running (should not be blocked)
-
+    Checks if Envicutor can get the available runtimes while an installation is running.
+    
 **stress.js**
 
 #. Executing 5000 Python submissions in parallel
