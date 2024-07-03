@@ -141,7 +141,7 @@ API Testing
 #. Execute Python code with a higher max_open_files limit (should not be able to open all of them)
     Checks that Envicutor can handle submissions that has more files than the max open files limit.
 #. Execute Python code with a lower max_open_files limit
-    Checks that Envicutor can handle submissions that has less files than the max open files limit and it runs succcessfully.
+    Checks that Envicutor can handle submissions that has less files than the max open files limit and it runs successfully.
 #. Execute Python code with invalid run max_file_size
     Checks that Envicutor can handle submissions with invalid max file size.
 #. Execute over-file-size-limit Python code

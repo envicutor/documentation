@@ -492,7 +492,7 @@ Resque workers (Judge0)
 Judge0 makes use of task queues and workers that pull tasks from these queues using Resque :cite:`resque-homepage`. It provides a way to configure the number of workers that can run concurrently :cite:`judge0-workers`. Such approach helps in scalability since workers can be distributed across multiple machines.
 
 Tokio's Semaphore and RwLock (Envicutor)
-======================================
+========================================
 
 Envicutor makes use of the Semaphore :cite:`tokio-semaphore` and RwLock :cite:`tokio-rwlock` objects in Rust's asynchronous runtime: Tokio :cite:`tokio-homepage`. These primitives help manage concurrent access to resources and ensure safety through Rust's ownership system and compile-time checks.
 
