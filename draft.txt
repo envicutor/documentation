@@ -12,3 +12,7 @@
   - Nix at runtime
   - Configurability in relation with other systems
   - Talk about caching the runtimes in memory in relation with other systems?
+
+Sequence diagrams
+  - API endpoints
+  - System startup

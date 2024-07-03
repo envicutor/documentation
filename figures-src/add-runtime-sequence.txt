@@ -1,0 +1,32 @@
+title Adding a new runtime
+
+actor client
+control handler
+entity metadata_cache
+entity os
+entity database
+entity filesystem
+control installation_lock
+
+client->handler: install runtime
+activate handler
+handler->installation_lock: acquire write lock (exclusive)
+activate installation_lock
+installation_lock->(1)handler: give permit when available
+handler->metadata_cache: check if runtime with the same name exists
+activate metadata_cache
+opt runtime does not exist exist, otherwise bad request
+handler->os: install nix packages, open nix shell,\nget environment variables
+activate os
+os->handler: stdout, stderr, status
+opt success, otherwise bad request or internal server error
+handler->database: insert runtime data
+activate database
+database->handler: runtime_id
+handler->filesystem: insert compile script (if any), run script,nix shell
+activate filesystem
+handler->filesystem: insert environment variables (stdout)
+handler->metadata_cache: insert runtime data for runtime_id
+handler->client: stdout, stderr
+end
+end

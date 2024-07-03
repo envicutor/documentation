@@ -25,7 +25,7 @@ latex_elements = {
   'figure_align': 'H',
   'preamble': r"""
 %% --------------------------------------------------
-%% |:sec:| add list of figures, list of tables
+%% |:sec:| add list of figures
 %% --------------------------------------------------
 \makeatletter
 \renewcommand{\sphinxtableofcontents}{%
@@ -42,10 +42,6 @@ latex_elements = {
   \if@openright\cleardoublepage\else\clearpage\fi
   \addcontentsline{toc}{chapter}{List of Figures}%
   \listoffigures
-  %
-  \if@openright\cleardoublepage\else\clearpage\fi
-  \addcontentsline{toc}{chapter}{List of Tables}%
-  \listoftables
   %
   \if@openright\cleardoublepage\else\clearpage\fi
   \pagenumbering{arabic}%
