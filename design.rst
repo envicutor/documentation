@@ -40,7 +40,13 @@ Rust provides different ways to implement object-oriented principles compared to
 
 As a result, using UML class diagrams to represent our Rust codebase can be challenging. For example, how does one represent implementing a local trait for an external struct? How does one represent public/private module functions and constants that are not associated with a struct? Unique aspects of Rust like these require adaptations or extensions to traditional UML diagrams to accurately model the codebase.
 
-As a result we believe the component diagram, along with the explanation of each component, should be sufficient to provide an overview of how the system works. Trying to represent the system using UML can be misleading for some readers and has low return-on-investment for the authors.
+As a result we believe the component diagram, along with the explanation of each component, should be sufficient to provide an overview of how the system works. That said, the following is a class diagram that shows a simplified overview of Envicutor's design. Functions and constants that are not associated with a struct are placed in classes called ``mod``.
+
+.. figure:: figures/class-diagram-4-rotated.png
+  :alt: class diagram
+
+  Envicutor's class diagram
+
 
 Sequence diagrams
 *****************
