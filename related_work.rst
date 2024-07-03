@@ -29,7 +29,7 @@ gives us the following output:
 
 This output represents all of the processes that are running on the system. We can see multiple python processes that are not started by us but are started by the same user as ours. We can conclude that in this system, all submissions run under the same user (repl), while the code execution system (PID 1) runs under the root user (root).
 
-This is an ineffective way of doing isolating submissions (which might be OK depending on their requirements). For instance, had we run the command ``killall python3`` instead of ``ps aux``, the python submissions of other users would have been terminated. Moreover, submissions can write into each others directories and read from each other.
+This is an ineffective way of isolating submissions (which might be OK depending on their requirements). For instance, had we run the command ``killall python3`` instead of ``ps aux``, the python submissions of other users would have been terminated. Moreover, submissions can write into each others directories and read from each other.
 
 Such isolation method would not be appropriate for running a code execution system that is used in competitive programming systems and assignment graders.
 
@@ -154,7 +154,7 @@ The following output can be observed indicating that the second sandbox was able
   </body>
   </html>
 
-In order to solve such problem, one would need to implement an network-interface-cloning method like the one used in Docker containers. However, even that does not entirely solve the problem; submissions might be able to send requests to nodes on the same network as the host node (the router does not know such requests are coming from the sandboxes). So if we have a database server in the same network as that of the node hosting the code execution system, the submissions will be to access it. Some sort of firewall would be needed. This was the cause of a critical security vulnerability in Judge0 :cite:`judge0-share-net-vulnerability`.
+In order to solve such problem, one would need to implement an network-interface-cloning method like the one used in Docker containers. However, even that does not entirely solve the problem; submissions might be able to send requests to nodes on the same network as the host node (the router does not know such requests are coming from the sandboxes). So if we have a database server in the same network as that of the node hosting the code execution system, the submissions will be able to access it. Some sort of firewall would be needed. This was the cause of a critical security vulnerability in Judge0 :cite:`judge0-share-net-vulnerability`.
 
 As a result of the previous complications, we decided that the return-on-investment for securely implementing an internet access solution is low and that the risk of insecurely implementing one is high.
 
@@ -230,7 +230,7 @@ Memory limits
 
 Piston code execution system uses the ``prlimit`` system command with the ``--as`` option to limit the amount of memory a process can allocate :cite:`piston-as`. This approach, however, enforces the memory limits on the processes and their children individually.
 
-This can be suboptimal in some client systems which might want to limit that total memory that is used by a submission. Client systems that wish to limit the total memory usage will either have to limit the total number of processes in a submission to 1 or to ensure that ``max_number_of_processes * memory_limit = total_limit``. Both options can be constraining.
+This can be suboptimal in some client systems which might want to limit the total memory that is used by a submission. Client systems that wish to limit the total memory usage will either have to limit the total number of processes in a submission to 1 or to ensure that ``max_number_of_processes * memory_limit = total_limit``. Both options can be constraining.
 
 Envicutor and Judge0 provide an option to limit the total used memory through their usage of cgroup via Isolate. Though, Envicutor uses cgroup v2 while Judge0 uses cgroup v1 as discussed in ":ref:`isolate_systemd`".
 
@@ -242,13 +242,13 @@ Piston only reports standard output, standard error, exit signal and exit code :
 Package installation and runtimes management
 ********************************************
 
-This section describes different approaches code execution systems use to manage package installation and managing runtimes as explained in :ref:`improvement_areas`, and the approach Envicutor uses.
+This section describes different approaches used by code execution systems to manage package installation and manage runtimes as explained in ":ref:`improvement_areas`", and the approach Envicutor uses.
 
 All the runtime packages and dependencies are baked in the Docker image (Judge0)
 ================================================================================
 
 Judge0 specifies the packages that are needed for the runtimes of the code execution system in its system's docker image :cite:`judge0-base-docker-image`.
-The implications of such method is that a system reboot is needed to add new packages, and build/runtimes dependencies that a package requires need to be installed globally on the system. This can be problematic if two packages have conflicting dependencies.
+The implications of such method is that a system reboot is needed to add new packages, and build/runtime dependencies (that a package requires) need to be installed globally on the system. This can be problematic if two packages have conflicting dependencies.
 
 For example, notice how the dependencies for the Octave programming language are installed globally using the ``apt`` package manager in the following snippet from the Dockerfile of the base docker image:
 
@@ -349,7 +349,7 @@ Overcoming the slow startup time of nix-shell
 
 Since Nix packages are isolated from each other and from the global execution environment, the ``nix-shell`` command must be used to make the packages specified in the ``shell.nix`` file available in the current environment (even if the Nix packages are downloaded on the system).
 
-The problem is that Nix needs to do a lot of computations in order to parse the packages in ``shell.nix``, identify where they point to on the system and download non-existing packages. For example, running the ``nix-shell`` command on the previous nix file containing the python package takes about 650 milliseconds to make the environment available on the machine of the author of this part of the document (with the Nix Python packages already downloaded).
+The problem is that Nix needs to do a lot of computations in order to parse the packages in ``shell.nix``, identify where they point to on the system and download non-existing packages. For example, running the ``nix-shell`` command on the previous nix file containing the python package takes about 650 milliseconds to make the environment available on the author's machine (with the Nix Python packages already downloaded).
 
 If we consider that the following Python program, that does about one million Python operations, takes 150 milliseconds on the same machine, we can see how large of an overhead the ``nix-shell`` command becomes:
 
@@ -359,7 +359,7 @@ If we consider that the following Python program, that does about one million Py
   for i in range(1000000):
       i += 1
 
-One million operations can be considered a common number of operations in competitive programming problems test cases. So, aside from performance problems, such overhead will also introduce challenges with setting the time limits on problems (having to account for the cpu time of the nix-shell startup in addition to the cpu time of the submission).
+One million operations can be considered a common number of operations in competitive programming problems' test cases. So, aside from performance problems, such overhead will also introduce challenges with setting the time limits on problems (having to account for the cpu time of the nix-shell startup in addition to the cpu time of the submission).
 
 To optimize our environment setup process, we implemented a solution where the ``nix-shell`` command is executed only once after adding the runtime. Adding the runtime is handled by a separate endpoint from the code execution endpoint. We then cache the resulting environment variables by running the ``env`` command within the created Nix environment and saving its output to a file. Before executing a code submission, these cached environment variables are loaded into the environment, eliminating the need to run ``nix-shell`` again.
 
@@ -449,12 +449,12 @@ The following snippet shows a part of the process of loading the environment var
 Concurrency
 ***********
 
-For reasons discussed in ":ref:`objectives`", only a certain number of submissions shall be allowed to run at a time on the system. This section describes different approaches code execution systems take to ensure that, and the approach that Envicutor takes.
+For reasons discussed in ":ref:`objectives`", only a certain number of submissions shall be allowed to run at a time on the system. This section describes different approaches code execution systems take to ensure concurrency, and the approach that Envicutor takes.
 
 Programmed semaphore in Node.js (Piston)
 ========================================
 
-Piston uses a semaphore that is manually programmed in Node.js to limit the number of submissions that can run at a time. The following code snippet in Piston shows the process of a acquiring a semaphore permit with some added comments for illustration :cite:`piston-job-file`:
+Piston uses a semaphore that is manually programmed in Node.js to limit the number of submissions that can run at a time. The following code snippet in Piston shows the process of acquiring a semaphore permit with some added comments for illustration :cite:`piston-job-file`:
 
 .. code-block:: javascript
 
@@ -489,9 +489,9 @@ Using manually programmed semaphores like this can lead to data races and ineffi
 Resque workers (Judge0)
 =======================
 
-Judge0 makes use of task queues and workers that pull tasks from these queues using Resque :cite:`resque-homepage`. It provides a way to configure the number of workers that can run concurrently :cite:`judge0-workers`. Such approach helps in scalability since workers can distributed across multiple machines.
+Judge0 makes use of task queues and workers that pull tasks from these queues using Resque :cite:`resque-homepage`. It provides a way to configure the number of workers that can run concurrently :cite:`judge0-workers`. Such approach helps in scalability since workers can be distributed across multiple machines.
 
-Tokio Semaphore and RwLock (Envicutor)
+Tokio's Semaphore and RwLock (Envicutor)
 ======================================
 
 Envicutor makes use of the Semaphore :cite:`tokio-semaphore` and RwLock :cite:`tokio-rwlock` objects in Rust's asynchronous runtime: Tokio :cite:`tokio-homepage`. These primitives help manage concurrent access to resources and ensure safety through Rust's ownership system and compile-time checks.
