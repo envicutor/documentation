@@ -1,0 +1,49 @@
+actor client
+control handler
+control isolate
+entity metadata_cache
+control os
+entity filesystem
+control installation_lock
+control execution_semaphore
+
+client->handler: install runtime
+activate handler
+handler->installation_lock: acquire read lock
+activate installation_lock
+installation_lock->(1)handler: give lock when available
+handler->execution_semaphore: acquire permit
+activate execution_semaphore
+execution_semaphore->(1)handler: give permit when available
+handler->metadata_cache: get runtime data based\non specified id
+activate metadata_cache
+metadata_cache->handler: runtime data (if found, otherwise bad request)
+handler->isolate: create box
+activate isolate
+isolate->os: create sandbox
+activate os
+isolate->filesystem: create box directory
+activate filesystem
+isolate->handler: box
+alt multi-file project
+handler->filesystem: base64 decode source code, write it to box.dir/submission/source.zip
+else
+handler->filesystem: write source code to box.dir/submission/runtime.source_file_name
+end
+opt multi-file project
+handler->isolate: run extraction command on\nbox.dir/submission/main.zip
+isolate->handler: extraction metrics
+handler->isolate: get new box
+isolate->handler: box
+end
+opt extraction successful and compiled runtime
+handler->isolate: run the runtime compilation command\nin the submission directory
+isolate->handler: compilation metrics
+handler->isolate: get new box
+isolate->handler: box
+end
+opt previous stages successful
+handler->isolate: run the runtime running command\nin the submission directory
+isolate->handler: run metrics
+end
+handler->client: extraction metrics (if any),\ncompilation metrics (if any),\nrun metrics (if any)

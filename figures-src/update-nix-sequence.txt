@@ -1,7 +1,7 @@
 actor client
 control handler
 entity metadata_cache
-entity os
+control os
 control installation_lock
 
 client->handler: install runtime

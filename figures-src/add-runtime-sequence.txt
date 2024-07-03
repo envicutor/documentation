@@ -1,9 +1,7 @@
-title Adding a new runtime
-
 actor client
 control handler
 entity metadata_cache
-entity os
+control os
 entity database
 entity filesystem
 control installation_lock

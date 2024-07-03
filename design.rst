@@ -91,3 +91,11 @@ Updating Nix installation
   :alt: updating nix sequence diagram
 
   Sequence diagram for updating Nix installation
+
+Executing code
+==============
+
+.. figure:: figures/execute-code-sequence.png
+  :alt: code execution sequence diagram
+
+  Sequence diagram for executing code (submissions)
