@@ -12,7 +12,7 @@ Having studied multiple open source code execution systems for the past three ye
 Why a code execution system?
 ============================
 
-Code executions systems power other systems that make use of remote code execution; such as: online IDEs :cite:`emkc-snippets` :cite:`judge0-ide`, online assignment auto-graders, competitive programming systems :cite:`dmoj` and online interactive programming tutorials. We will refer to these systems as the client systems. By providing an improved code execution system, we can improve the user experience for the developers, the administrators, and the users of the client systems.
+Code execution systems power other systems that make use of remote code execution; such as: online IDEs :cite:`emkc-snippets` :cite:`judge0-ide`, online assignment auto-graders, competitive programming systems :cite:`dmoj` and online interactive programming tutorials. We will refer to these systems as the client systems. By providing an improved code execution system, we can improve the user experience for the developers, the administrators, and the users of the client systems.
 
 Problem definition
 ******************
