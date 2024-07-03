@@ -47,7 +47,6 @@ As a result we believe the component diagram, along with the explanation of each
 
   Envicutor's class diagram
 
-
 Sequence diagrams
 *****************
 
