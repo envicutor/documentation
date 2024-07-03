@@ -1,0 +1,17 @@
+title Deleting a runtime
+
+actor client
+control handler
+entity metadata_cache
+entity database
+
+client->handler: delete runtime
+activate handler
+handler->database: delete runtime with\nclient-specified id
+activate database
+database->handler: number of\naffected rows
+alt affected rows > 0
+handler->client: success
+else
+handler->client: 404, no such runtime
+end

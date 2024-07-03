@@ -1,0 +1,17 @@
+actor client
+control handler
+entity metadata_cache
+entity os
+control installation_lock
+
+client->handler: install runtime
+activate handler
+handler->installation_lock: acquire write lock (exclusive)
+activate installation_lock
+installation_lock->(1)handler: give permit when available
+handler->os: nix update command
+activate os
+os->handler: stdout, stderr, status
+opt success, otherwise internal server error
+handler->client: stdout, stderr
+end

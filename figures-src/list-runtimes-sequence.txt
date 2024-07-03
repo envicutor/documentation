@@ -1,0 +1,15 @@
+title Listing available runtimes
+
+actor client
+control handler
+entity metadata_cache
+
+client->handler: List runtimes
+activate handler
+handler->metadata_cache: get map iterator
+activate metadata_cache
+handler<-metadata_cache: map iterator
+deactivate metadata_cache
+handler->handler: create vector from\nmap iterator
+handler->client: runtimes vector
+deactivate handler

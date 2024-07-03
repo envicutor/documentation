@@ -40,12 +40,20 @@ Rust provides different ways to implement object-oriented principles compared to
 
 As a result, using UML class diagrams to represent our Rust codebase can be challenging. For example, how does one represent implementing a local trait for an external struct? How does one represent public/private module functions and constants that are not associated with a struct? Unique aspects of Rust like these require adaptations or extensions to traditional UML diagrams to accurately model the codebase.
 
-As a result we believe the component diagram, along with the explanation of each component, should be sufficient to provide an overview of how the system works. That said, the following is a class diagram that shows a simplified overview of Envicutor's design. Functions and constants that are not associated with a struct are placed in classes called ``mod``.
+As a result we believe the component diagram, along with the explanation of each component, should be sufficient to provide an overview of how the system works. That said, the following are class diagrams that attempt to show a simplified overview of Envicutor's design.
 
-.. figure:: figures/class-diagram-4-rotated.png
-  :alt: class diagram
+Functions and constants that are not associated with a struct are placed in UML classes called ``mod``. Note that some associations will not be shown in the following class diagrams for simplicity.
 
-  Envicutor's class diagram
+.. figure:: figures/class-diagram-api-mod.png
+  :alt: api mod class diagram
+
+  A class diagram of the API module and the modules inside of it
+
+
+.. figure:: figures/class-diagram-root-crate.png
+  :alt: root crate class diagram
+
+  A class diagram of the rest of the modules
 
 Sequence diagrams
 *****************
@@ -59,3 +67,27 @@ The following sequence diagram shows an overview of how a new runtime is added t
   :alt: adding a runtime sequence diagram
 
   Sequence diagram for adding a new runtime
+
+Listing the available runtimes
+==============================
+
+.. figure:: figures/listing-runtimes-sequence.png
+  :alt: listing runtimes sequence diagram
+
+  Sequence diagram for listing the available runtimes
+
+Deleting a runtime
+==================
+
+.. figure:: figures/deleting-runtime-sequence.png
+  :alt: deleting runtime sequence diagram
+
+  Sequence diagram for deleting a runtime
+
+Updating Nix installation
+=========================
+
+.. figure:: figures/updating-nix-sequence.png
+  :alt: updating nix sequence diagram
+
+  Sequence diagram for updating Nix installation
