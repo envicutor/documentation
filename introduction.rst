@@ -153,7 +153,7 @@ Project work plan
 Development methodology
 ***********************
 
-Our development methodology is grounded in an iterative process of optimizing architecture and design through experimentation and prototyping. This approach is necessitated by the fact that Envicutor is based on integration with the operating system and various external tools.
+Our development methodology is grounded in an iterative process of optimizing architecture and design through experimentation and prototyping. This approach is necessitated by the the fact that Envicutor is based on integration with the operating system and various external tools.
 
 Relying solely on a pre-implementation design phase is insufficient to guarantee system robustness, as the interaction with these external factors—such as the operating system and diverse tools—introduces variables that can impact the system's functionality, reliability, performance and security. Therefore, continuous experimentation and design refinement are essential to address and mitigate these external influences. Such experimentation and refinement are illustrated throughout the report.
 
