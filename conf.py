@@ -40,7 +40,6 @@ latex_elements = {
   %
   %% addtional lists
   \if@openright\cleardoublepage\else\clearpage\fi
-  \addcontentsline{toc}{chapter}{List of Figures}%
   \listoffigures
   %
   \if@openright\cleardoublepage\else\clearpage\fi
