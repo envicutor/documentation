@@ -59,8 +59,8 @@ Submissions execution
     - SG: indicating that the process died on a signal
     - TO: indicating that the process exceeded either the CPU or the wall time limit
     - XX: indicating an internal error of the sandbox
-  - The standard output that the submission's processes produced
-  - The standard error that the submission's processes produced
+  - The standard output that the submission processes produced
+  - The standard error that the submission processes produced
   - The CPU time consumed by the submission. The CPU time is the amount of time the CPU was actually working on the submission's processes. This excludes time in which the CPU context-switched to other processes due to scheduling, idle time, and blocked time (waiting for external IO resources)
   - The wall time consumed by the submission. The wall time is the total amount of time that the submission's processes stayed on the system whether or not the CPU was working on them for the entirety of this period
 
