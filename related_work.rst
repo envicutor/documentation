@@ -449,7 +449,7 @@ The following snippet shows a part of the process of loading the environment var
 Concurrency
 ***********
 
-For reasons discussed in ":ref:`objectives`", only a certain number of submissions shall be allowed to run at a time on the system. This section describes different approaches code execution systems take to ensure concurrency, and the approach that Envicutor takes.
+For reasons discussed in ":ref:`objectives`", only a certain number of submissions shall be allowed to run at a time on the system. This section describes different approaches code execution systems take to limit concurrency, and the approach that Envicutor takes.
 
 Programmed semaphore in Node.js (Piston)
 ========================================
