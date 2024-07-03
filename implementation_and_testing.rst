@@ -4,7 +4,7 @@ Implementation and Testing
 Introduction
 ***************
 
-This section outlines the testing methodologies and implementation strategies employed to ensure the robustness and reliability of Envicutor. The system is designed to manage code submissions, execute them against predefined test cases, and provide results. To validate its effectiveness, a web application simulating a coding contest environment was developed, allowing real-world testing under various conditions including concurrent submissions and handling of malicious inputs.
+This section outlines the testing methodologies and implementation strategies employed to ensure the robustness and reliability of Envicutor. To validate its effectiveness, a web application simulating a coding contest environment was developed, allowing real-world testing under various conditions including concurrent submissions and handling of malicious inputs.
 
 Testing Methodologies
 *********************
@@ -62,7 +62,7 @@ API Testing
 
 * Conducted automated tests to ensure the API handles valid and invalid requests appropriately.
 
-* Evaulated the API's performance under concurrent access conditions.
+* Evaluated the API's performance under concurrent access conditions.
 
 Security Testing
 ================
@@ -73,7 +73,6 @@ Security Testing
 **Approach**:
 
 * Injected malicious submissions during contest simulations to test resilience against code injection, infinite loops, and resource exhaustion.
-* Implemented sandboxing and resource-limiting measures to contain and mitigate the impact of malicious code.
 
 
 Stress Testing
