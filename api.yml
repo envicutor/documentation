@@ -209,24 +209,31 @@ components:
         wall_time:
           type: integer
           nullable: true
+          description: The maximum amount of wall-time that the submission is allowed to take in seconds
         cpu_time:
           type: integer
           nullable: true
+          description: The maximum amount of CPU-time that the submission is allowed to take in seconds
         memory:
           type: integer
           nullable: true
+          description: The maximum amount of memory that the submission is allowed to consume in kilobytes
         extra_time:
           type: integer
           nullable: true
+          description: 'Check extra-time here: https://www.ucw.cz/moe/isolate.1.html'
         max_open_files:
           type: integer
           nullable: true
+          description: The maximum number of file descriptors the submission can open
         max_file_size:
           type: integer
           nullable: true
+          description: The maximum size of EACH file created/modified by the submission in kilobytes
         max_number_of_processes:
           type: integer
           nullable: true
+          description: The maximum number of processes the submission is allowed to run concurrently
 
     StageResult:
       type: object
