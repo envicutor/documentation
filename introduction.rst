@@ -146,7 +146,7 @@ Project work plan
   * - Re-structure the documentation and write an API documentation for the system
     - Done
   * - Open source the system
-    - Future
+    - Done
   * - Work on CI/CD for the system
     - Future
 
